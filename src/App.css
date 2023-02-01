@@ -5,10 +5,8 @@
 }
 .btnOpen{
     height: 40px;
-    width: 100px;
-    background-color: blue;
-    border: none;
-    color:white;
+    width: 200px;
+    border:1px solid;
     font-size: 20px;
     border-radius: 10px;
 } 
@@ -35,9 +33,11 @@
     height: 40px;
     width: 40px;
     margin-right: 10px;
+    border: 1px solid red;
 }
 .modal__input>input:focus{
-  outline:1px solid rgb(76, 241, 76);
+    border: 1px solid green;
+    outline:2px solid rgb(76, 241, 76);
 }
 .modal__bottom {
     display: flex;
@@ -50,4 +50,14 @@
 .success {
     color: green;
     margin-left: 30px;
+}
+.modal__btn {
+    height: 30px;
+    width: 250px;
+    margin-top: 10px;
+    margin-left: 30;
+    font-size: 16px;
+    color:white;
+    background-color: blue;
+    border: none;
 }
