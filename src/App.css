@@ -1,0 +1,53 @@
+.registerOtp {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+.btnOpen{
+    height: 40px;
+    width: 100px;
+    background-color: blue;
+    border: none;
+    color:white;
+    font-size: 20px;
+    border-radius: 10px;
+} 
+.modal {
+    height: 300px;
+    width: 500px;
+    background-color: white;
+    margin:100px auto;  
+}
+
+.modal__main {
+    padding-top: 30px;
+    padding-left: 30px;
+}
+.modal__header{
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 2px solid rgb(85, 84, 84);
+}
+.modal__input {
+    display: flex;
+}
+.modal__input>input{
+    height: 40px;
+    width: 40px;
+    margin-right: 10px;
+}
+.modal__input>input:focus{
+  outline:1px solid rgb(76, 241, 76);
+}
+.modal__bottom {
+    display: flex;
+    justify-content: space-around;
+}
+.error {
+    color:red ;
+    margin-left: 30px;
+}
+.success {
+    color: green;
+    margin-left: 30px;
+}
