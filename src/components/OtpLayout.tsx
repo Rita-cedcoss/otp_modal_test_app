@@ -13,9 +13,14 @@ type openProps = {
   timersec: number;
   disable: boolean;
   attempts: number;
+  setOpen:any;
+  message:any;
+  setMessqe:any;
+  msgColor:any;
+  setMsgcolor:any
 };
 const OtpLayout = (props: openProps) => {
-  const [message, setMessqe] = useState("Enter one time passcode");
+  // const [message, setMessqe] = useState("Enter one time passcode");
   const [msgColor, setMsgcolor] = useState("error");
   // function for val match valid otp
   const digit1 = (e: any) => {
@@ -35,11 +40,11 @@ const OtpLayout = (props: openProps) => {
         props.randomNum?.toString().split("")[3] == num4 &&
         props.randomNum?.toString().split("")[4] == num5
       ) {
-        setMsgcolor("success");
-        setMessqe("opt Sent Successfull");
+        // setMsgcolor("success");
+        props.setOpen(false);
       } else {
         setMsgcolor("error");
-        setMessqe(" one time passcode is incorrect!");
+        props.setMessqe(" one time passcode is incorrect!");
       }
     }
   };
@@ -47,7 +52,7 @@ const OtpLayout = (props: openProps) => {
   const nextInpFocus = (e: any, num1: any) => {
     if (e.key === "Enter") {
       num1.current.nextSibling.focus();
-    }
+    }  
   };
   return (
     <Modal
@@ -102,7 +107,7 @@ const OtpLayout = (props: openProps) => {
             />
           </div>
         </div>
-        <p className={msgColor}>{message}</p>
+        <p className={msgColor}>{props.message}</p>
         <div className="modal__bottom">
           <button
             disabled={props.disable}
