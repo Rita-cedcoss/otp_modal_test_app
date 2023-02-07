@@ -1,0 +1,60 @@
+.modalouter {
+    height: 300px;
+    width: 600px;
+    background-color: white;
+    margin:100px auto;  
+}
+.modal__header {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 2px solid rgb(85, 84, 84);
+}
+.modal__main {
+    padding-top: 30px;
+    padding-left: 30px;
+}
+.modal__input {
+    display: flex;
+}
+.modal__input>input{
+    height: 40px;
+    width: 40px;
+    margin-right: 10px;
+    /* border: 1px solid red; */
+  }
+  .inpborder{
+    border:1px solid red;
+  }
+  .inpborder1{
+    border:1px solid;
+  }
+  .success{
+    border:1px solid green;
+  }
+  .successMsg{
+    color:green;
+  }
+  .errorMsg{
+    color:red;
+  }
+  .resendMsg{
+    color:blue;
+  }
+  .modal__input>input:focus{
+    border: 1px solid black;
+    outline:2px solid black;
+  }
+.modal__bottom {
+    display: flex;
+    justify-content: space-around;
+}
+.modal__btn {
+    height: 30px;
+  width: 250px;
+  margin-top: 10px;
+  margin-left: 30;
+  font-size: 16px;
+  color:white;
+  background-color: blue;
+  border: none;
+}

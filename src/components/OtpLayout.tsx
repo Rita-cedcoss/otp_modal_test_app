@@ -1,127 +1,175 @@
-import { Modal } from "@mui/material";
-import React, { useState } from "react";
-type openProps = {
-  open: boolean;
-  handleclose: () => void;
-  randomNum: number | undefined;
-  random: () => void;
-  num1: any;
-  num2: any;
-  num3: any;
-  num4: any;
-  num5: any;
-  timersec: number;
-  disable: boolean;
-  attempts: number;
-  setOpen:any;
-  message:any;
-  setMessqe:any;
-  msgColor:any;
-  setMsgcolor:any
-};
-const OtpLayout = (props: openProps) => {
-  // const [message, setMessqe] = useState("Enter one time passcode");
-  const [msgColor, setMsgcolor] = useState("error");
-  // function for val match valid otp
-  const digit1 = (e: any) => {
-    let num1 = props.num1.current.value;
-    let num2 = props.num2.current.value;
-    let num3 = props.num3.current.value;
-    let num4 = props.num4.current.value;
-    let num5 = props.num5.current.value;
-    let inpValu1 = e.target.value;
-    if (!inpValu1.match(/^[0-9]*$/)) {
-      alert("please enter number");
-    } else {
-      if (
-        props.randomNum?.toString().split("")[0] == num1 &&
-        props.randomNum?.toString().split("")[1] == num2 &&
-        props.randomNum?.toString().split("")[2] == num3 &&
-        props.randomNum?.toString().split("")[3] == num4 &&
-        props.randomNum?.toString().split("")[4] == num5
-      ) {
-        // setMsgcolor("success");
-        props.setOpen(false);
-      } else {
-        setMsgcolor("error");
-        props.setMessqe(" one time passcode is incorrect!");
-      }
+import { Message } from '@mui/icons-material';
+import { Modal } from '@mui/material'
+import React, { SetStateAction, useEffect, useRef, useState } from 'react'
+// import "../App.css"
+type OtpLayoutProps={
+  flag:boolean;
+  random:number|undefined;
+  // resentOtp:()=>void
+  setDisabled:React.Dispatch<React.SetStateAction<boolean>>
+ setFlag:React.Dispatch<React.SetStateAction<boolean>>
+ otpGenerate:()=>void
+//  timerSec:number;
+//  attempts:number;
+ disabled:boolean;
+}
+const OtpLayout = (props:OtpLayoutProps) => {
+  const [massage,setMessage]=useState("");
+  const [inpBorder,setInpborder]=useState("");
+  let [timerSec, setTimer] = useState(59);
+  let [attempts,setAttempts]=useState<any>(4);
+  const [msgColor,setMsgColor]=useState('');
+  const intervalRef=useRef<any>();
+  const refArr=useRef<any>([]);
+  const handleclose=()=>{
+    setInpborder("inpborder1");
+    setMessage("");
+    setAttempts(4);
+   props.setFlag(false);
+   setTimer(60);
+  }
+// for timer
+useEffect(() => {
+  props.setDisabled(true);
+  clearInterval(intervalRef.current);
+  intervalRef.current=setInterval(()=>{
+    if(timerSec>0)
+    timerSec--;
+    setTimer(timerSec);
+  },1000);
+  if(timerSec==0)
+  {
+    props.setDisabled(false)
+  }
+}, [timerSec]);
+
+//  useEffect
+    
+   useEffect(()=>{
+    setTimeout(()=>refArr.current[0].focus());     
+   },[]);
+  // resend opt
+  const resentOtp=()=>{ 
+    setMessage("Resend Otp Successfully");
+    setMsgColor("resendMsg");
+    setInpborder("");
+    refArr.current.map((item:any)=>{
+         item.value=''
+     
+    })
+    
+    props.setDisabled(true);
+    if(attempts>0)
+    {
+      attempts--
+      props.otpGenerate();
+      setTimer(59);
     }
-  };
-  //  focus on next input after press enter button
-  const nextInpFocus = (e: any, num1: any) => {
-    if (e.key === "Enter") {
-      num1.current.nextSibling.focus();
-    }  
-  };
+    else{
+      props.setDisabled(true);
+    }    
+    setAttempts(attempts);
+  }
+
+  // input Handler
+  const inputHandler=(e:any,i:number)=>{
+    setMessage("");
+    setInpborder("");
+  let inpArr : any=[];
+  if(e.target.value.match(/[0-9]/)){
+    refArr.current[i].value=e.target.value;
+    if(i < refArr.current.length-1){
+      refArr.current[i+1]?.focus();
+    }
+    console.log(refArr.current[i].value);
+    let count=true;
+    refArr.current.map((item:any,i:any)=>{
+        if(item.value==''){
+          setMessage("");
+          count=false;
+        }
+    })
+    if(count)
+    {
+      setInpborder("inpborder1");
+         refArr.current.map((item:any)=>{
+          inpArr.push(item.value);
+         })
+         if(inpArr.join("")==props.random){
+          setTimeout(()=>{
+          props.setFlag(false);
+          setTimer(60);
+          setMessage('')
+          setInpborder('');
+          // setLoading(true)
+          },1000)
+          setMessage("otp matched!");
+          setMsgColor("successMsg");
+          setInpborder("success");
+        }
+        else{
+          setMessage("opt Not matched !");
+          setInpborder("inpborder");
+          setMsgColor("errorMsg");
+        }
+    }
+    // console.log(inpArr.join(""));
+   
+  }
+  else{
+    e.target.value="";
+  }
+  console.log(inpArr);
+  }
+  // backinput Handler
+  const backInputHandler=(e:any)=>{
+    
+  }
   return (
     <Modal
-      open={props.open}
-      onClose={props.handleclose}
+      open={props.flag}
       aria-labelledby="parent-modal-title"
       aria-describedby="parent-modal-description"
     >
-      <div className="modal">
-        <div className="modal__header">
-          <h3>Verify Your Email Address({props.randomNum})</h3>
-          <h3 onClick={props.handleclose}>X</h3>
+    <div className="modalouter">
+    <div className="modal__header">
+          <h3>Verify Your Email Address({props.random})</h3>
+          <h3 onClick={handleclose}>X</h3>
         </div>
         <div className="modal__main">
           <p>Enter your code here</p>
           <div className="modal__input">
-            <input
+            {props.random?.toString().split("").map((item,i)=>{
+                return(<>
+                 <input
+                 className={`${inpBorder}`}
               type="text"
-              ref={props.num1}
-              onChange={digit1}
-              name={props.num1}
-              onKeyPress={(e) => nextInpFocus(e, props.num1)}
+              ref={(ref)=>refArr.current[i]=ref}
+              onChange={(e)=>inputHandler(e,i)}
+              onKeyUp={(e)=>backInputHandler(e)}
               maxLength={1}
             />
-            <input
-              type="text"
-              ref={props.num2}
-              onChange={digit1}
-              maxLength={1}
-              onKeyPress={(e) => nextInpFocus(e, props.num2)}
-            />
-            <input
-              type="text"
-              ref={props.num3}
-              onChange={digit1}
-              maxLength={1}
-              onKeyPress={(e) => nextInpFocus(e, props.num3)}
-            />
-            <input
-              type="text"
-              ref={props.num4}
-              onChange={digit1}
-              maxLength={1}
-              onKeyPress={(e) => nextInpFocus(e, props.num4)}
-            />
-            <input
-              type="text"
-              ref={props.num5}
-              onChange={digit1}
-              maxLength={1}
-              onKeyPress={(e) => nextInpFocus(e, props.num5)}
-            />
-          </div>
+                </>)
+            })}  
+          </div>    
         </div>
-        <p className={msgColor}>{props.message}</p>
+        <p className={`${msgColor} ps-5  `}>
+        {(massage=="otp matched!")?<img height="70px" width="150px" src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif?20151024034921"/>:""}
+          {massage}</p>
         <div className="modal__bottom">
           <button
-            disabled={props.disable}
-            onClick={props.random}
             className="modal__btn"
+            onClick={resentOtp}
+            disabled={props.disabled}
           >
             Resend one time password
           </button>
-          <p>({props.attempts} attempts left)</p>
-          <p className="error">{props.timersec} sec</p>
+          <p className='pt-3'>({attempts} attempts left)</p>
+          <p className="error pt-3 errorMsg">{timerSec} sec</p>
         </div>
-      </div>
+    </div>
     </Modal>
-  );
-};
+  )
+}
 
-export default OtpLayout;
+export default OtpLayout
