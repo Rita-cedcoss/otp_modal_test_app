@@ -10,7 +10,7 @@ type OtpLayoutProps = {
   setTimer: React.Dispatch<React.SetStateAction<number>>;
   disabled: boolean;
 };
-let inpArr: any = [];
+
 const OtpLayout = (props: OtpLayoutProps) => {
   const [massage, setMessage] = useState("");
   const [inpBorder, setInpborder] = useState("");
@@ -27,7 +27,7 @@ const OtpLayout = (props: OtpLayoutProps) => {
   //useEffect for focus on input
   useEffect(() => {
     setTimeout(() => refArr.current[0].focus(), 300);
-  }, [attempts,props.timerSec]);
+  }, [attempts]);
   // resend opt
   const resentOtp = () => {
     setMessage("Resend Otp Successfully");
@@ -68,11 +68,13 @@ const OtpLayout = (props: OtpLayoutProps) => {
         }
       });
       if (count) {
+        let inpArr: any = [];
         setInpborder("inpborder1");
         refArr.current.map((item: any) => {
           inpArr.push(item.value);
         });
         if (inpArr.join("") == props.random) {
+          console.log(inpArr)
           setTimeout(() => {
             props.setFlag(false);
             setMessage("");
@@ -93,7 +95,6 @@ const OtpLayout = (props: OtpLayoutProps) => {
   };
   //for back to previous input
   const backInputHandler = (e: any, i: number) => {
-    console.log(inpArr[i], refArr.current[i].value);
     if (e.key == "Backspace") {
       if (refArr.current[i].value == "") {
         refArr.current[i - 1].focus();
