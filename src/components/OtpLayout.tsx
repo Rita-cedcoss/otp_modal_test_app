@@ -43,7 +43,7 @@ const OtpLayout = (props: OtpLayoutProps) => {
     if (attempts > 0) {
       attempts--;
       props.otpGenerate();
-      props.setTimer(5);
+      props.setTimer(59);
     } 
     if(attempts==0)
     {
