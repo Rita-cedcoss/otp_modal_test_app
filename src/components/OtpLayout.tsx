@@ -27,7 +27,7 @@ const OtpLayout = (props: OtpLayoutProps) => {
   //useEffect for focus on input
   useEffect(() => {
     setTimeout(() => refArr.current[0].focus(), 300);
-  }, [attempts]);
+  }, [attempts,props.timerSec]);
   // resend opt
   const resentOtp = () => {
     setMessage("Resend Otp Successfully");
@@ -40,16 +40,18 @@ const OtpLayout = (props: OtpLayoutProps) => {
       item.value = "";
     });
     props.setDisabled(true);
-    if (attempts > 0) {
+    if(attempts>0) {
       attempts--;
       props.otpGenerate();
-      props.setTimer(59);
+      props.setTimer(5);
     } 
-    if(attempts==0)
-    {
+    else
+    { 
+      setMessage("Limit exceed")
       props.setDisabled(true); 
     }
     setAttempts(attempts);
+ 
   };
   // input Handler
   const inputHandler = (e: any, i: number) => {
