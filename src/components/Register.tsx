@@ -4,14 +4,14 @@ import OtpLayout from './OtpLayout';
 
 const Register = () => {
     const inpRef=useRef<HTMLInputElement>(null);
-    const [number,setNumber]=useState<any>(5);
+    const [number,setNumber]=useState<any>();
     const[message,setmessage]=useState<string>("");
     const [random,setRandom]=useState<number>();
     const[flag,setFlag]=useState<boolean>(false);
+    const intervalRef=useRef<any>();
     let [timerSec, setTimer] = useState(59);
-    let [attempts,setAttempts]=useState<any>(4);
     const[disabled,setDisabled]=useState<boolean>(false);
-    // take value 4 t0 8 from input
+// take value 4 t0 8 from input
     const inpNum=(e:any)=>{
       console.log(e.target.value);
         if(e.target.value.match(/^[4-8]$/))
@@ -22,14 +22,19 @@ const Register = () => {
     else{
         if(e.target.value=='')
           setNumber(e.target.value);
-          setmessage("number between 4 to 8"); 
+          setmessage("Please Enter number between range 4 to 8"); 
     }
     }
-    // for opt generation
+// for opt generation
     const otpGenerate=()=>{
+      console.log(number);
+      if(number==''||number==undefined)
+      {
+        setmessage("Please Enter number between range 4 to 8");
+      }else{
         let max : string=""
         let min: string="1"
-        
+
         for(let i=1;i<=number;i++)
         {
             max+=9
@@ -40,40 +45,39 @@ const Register = () => {
             }
         }
         let random=Math.floor(Math.random()*(parseInt(max)-parseInt(min))+parseInt(min))
-        setRandom(random)
+        setRandom(random);
         setFlag(true);
         setTimer(59);
-        setAttempts(5);
         setDisabled(true);
-        
-    }
-    // for resend otp
- 
-    // for timer
-    // useEffect(() => {
-    //   setDisabled(true);
-    //   clearInterval(intervalRef.current);
-    //   intervalRef.current=setInterval(()=>{
-    //     if(timerSec>0)
-    //     timerSec--;
-    //     setTimer(timerSec);
-    //   },1000);
-    //   if(timerSec==0)
-    //   {
-    //     setDisabled(false)
-    //   }
-    // }, [timerSec]);
+      }  
+    } 
+//for Timer 
+    useEffect(() => {
+      setDisabled(true);
+      clearInterval(intervalRef.current);
+      intervalRef.current=setInterval(()=>{
+        if(timerSec>0)
+        timerSec--;
+        setTimer(timerSec);
+      },1000);
+      if(timerSec==0)
+      {
+      setDisabled(false)
+      }
+    }, [timerSec]);
   return (
     <>
     <div>
         <br></br>
-        <p>Enter the Number to get Opt (Default value is 5) </p>
-        <input type="text" placeholder='Current value 5' ref={inpRef} value={number} maxLength={1} onChange={(e)=>inpNum(e)}/>
+        <p>Enter the Number between range 4 to 8</p>
+        <input type="text"  ref={inpRef} value={number} maxLength={1} onChange={(e)=>inpNum(e)}/>
         <p>{message}</p>
         <button onClick={otpGenerate}>Validate otp</button>
     </div>
-    <OtpLayout otpGenerate={otpGenerate} flag={flag} setFlag={setFlag} random={random} disabled={disabled}  setDisabled={setDisabled}/>
-    </>
+    {
+      (flag)&&<OtpLayout otpGenerate={otpGenerate} timerSec={timerSec} setTimer={setTimer} flag={flag} setFlag={setFlag} random={random} disabled={disabled}  setDisabled={setDisabled}/>
+    }
+   </>
   )
 }
 

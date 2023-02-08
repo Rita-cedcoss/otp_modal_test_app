@@ -16,31 +16,31 @@
 .modal__input {
     display: flex;
 }
-.modal__input>input{
+.modal__input>input {
     height: 40px;
     width: 40px;
     margin-right: 10px;
     /* border: 1px solid red; */
   }
-  .inpborder{
+.inpborder {
     border:1px solid red;
   }
-  .inpborder1{
+.inpborder1 {
     border:1px solid;
   }
-  .success{
+.success {
     border:1px solid green;
   }
-  .successMsg{
+.successMsg {
     color:green;
   }
-  .errorMsg{
+.errorMsg{
     color:red;
   }
-  .resendMsg{
+.resendMsg {
     color:blue;
   }
-  .modal__input>input:focus{
+.modal__input>input:focus {
     border: 1px solid black;
     outline:2px solid black;
   }
