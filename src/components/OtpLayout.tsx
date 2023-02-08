@@ -1,7 +1,5 @@
-import { Message } from "@mui/icons-material";
 import { Modal } from "@mui/material";
 import React, { SetStateAction, useEffect, useRef, useState } from "react";
-// import "../App.css"
 type OtpLayoutProps = {
   flag: boolean;
   random: number | undefined;
@@ -12,25 +10,30 @@ type OtpLayoutProps = {
   setTimer: React.Dispatch<React.SetStateAction<number>>;
   disabled: boolean;
 };
+let inpArr: any = [];
 const OtpLayout = (props: OtpLayoutProps) => {
   const [massage, setMessage] = useState("");
   const [inpBorder, setInpborder] = useState("");
   let [attempts, setAttempts] = useState<any>(4);
   const [msgColor, setMsgColor] = useState("");
   const refArr = useRef<any>([]);
+  //for close modal
   const handleclose = () => {
     setInpborder("inpborder1");
     setMessage("");
     setAttempts(4);
     props.setFlag(false);
   };
-  //  useEffect for focus timer
+  //useEffect for focus on input
   useEffect(() => {
     setTimeout(() => refArr.current[0].focus(), 300);
   }, [attempts]);
   // resend opt
   const resentOtp = () => {
     setMessage("Resend Otp Successfully");
+    setTimeout(()=>{
+      setMessage("");
+    },1000)
     setMsgColor("resendMsg");
     setInpborder("");
     refArr.current.map((item: any) => {
@@ -40,9 +43,11 @@ const OtpLayout = (props: OtpLayoutProps) => {
     if (attempts > 0) {
       attempts--;
       props.otpGenerate();
-      props.setTimer(59);
-    } else {
-      props.setDisabled(true);
+      props.setTimer(5);
+    } 
+    if(attempts==0)
+    {
+      props.setDisabled(true); 
     }
     setAttempts(attempts);
   };
@@ -50,13 +55,9 @@ const OtpLayout = (props: OtpLayoutProps) => {
   const inputHandler = (e: any, i: number) => {
     setMessage("");
     setInpborder("");
-    let inpArr: any = [];
     if (e.target.value.match(/[0-9]/)) {
       refArr.current[i].value = e.target.value;
-      if (i < refArr.current.length - 1) {
-        refArr.current[i + 1]?.focus();
-      }
-      console.log(refArr.current[i].value);
+      if (i < refArr.current.length - 1) refArr.current[i + 1].focus();
       let count = true;
       refArr.current.map((item: any, i: any) => {
         if (item.value == "") {
@@ -74,12 +75,12 @@ const OtpLayout = (props: OtpLayoutProps) => {
             props.setFlag(false);
             setMessage("");
             setInpborder("");
-          }, 1000);
-          setMessage("otp matched!");
+          }, 1000);   
+          setMessage("One Time passcode is matched!");
           setMsgColor("successMsg");
           setInpborder("success");
         } else {
-          setMessage("opt Not matched !");
+          setMessage("One Time Passcode is Not matched !");
           setInpborder("inpborder");
           setMsgColor("errorMsg");
         }
@@ -88,17 +89,13 @@ const OtpLayout = (props: OtpLayoutProps) => {
       e.target.value = "";
     }
   };
-  // backinput Handler
-  const backInputHandler = (e: any,i:number) => {
-    console.log(e.key);
-    if(e.key=="Backspace"){
-      if(refArr.current[i].value!=="" && e.key=="Backspace")
-      {
-          refArr.current[i-1].focus();
+  //for back to previous input
+  const backInputHandler = (e: any, i: number) => {
+    console.log(inpArr[i], refArr.current[i].value);
+    if (e.key == "Backspace") {
+      if (refArr.current[i].value == "") {
+        refArr.current[i - 1].focus();
       }
-      if(refArr.current[i].value==''){
-          refArr.current[i-1].focus(); 
-      } 
     }
   };
   return (
@@ -126,7 +123,7 @@ const OtpLayout = (props: OtpLayoutProps) => {
                       type="text"
                       ref={(ref) => (refArr.current[i] = ref)}
                       onChange={(e) => inputHandler(e, i)}
-                      onKeyUp={(e) => backInputHandler(e,i)}
+                      onKeyDown={(e) => backInputHandler(e, i)}
                       maxLength={1}
                     />
                   </>
@@ -135,8 +132,9 @@ const OtpLayout = (props: OtpLayoutProps) => {
           </div>
         </div>
         <p className={`${msgColor} ps-5  `}>
-          {massage == "otp matched!" ? (
+          {massage == "One Time passcode is matched!" ? (
             <img
+              alt=""
               height="70px"
               width="150px"
               src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif?20151024034921"
@@ -148,14 +146,14 @@ const OtpLayout = (props: OtpLayoutProps) => {
         </p>
         <div className="modal__bottom">
           <button
-            className="modal__btn"
+            className="border-0"
             onClick={resentOtp}
             disabled={props.disabled}
           >
             Resend one time password
           </button>
           <p className="pt-3">({attempts} attempts left)</p>
-          <p className="error pt-3 errorMsg">{props.timerSec} sec</p>
+          <p className="error pt-3 errorMsg">00:{props.timerSec==0?'00':props.timerSec}</p>
         </div>
       </div>
     </Modal>

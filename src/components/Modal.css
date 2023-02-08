@@ -1,3 +1,13 @@
+.registerOuter{
+    height: 300px;
+    width:30%;
+    text-align: center;
+    margin:100px auto;
+    padding-top:20px;
+    border: 1px solid black;
+    border-radius: 10px;
+
+}
 .modalouter {
     height: 300px;
     width: 600px;
@@ -20,7 +30,6 @@
     height: 40px;
     width: 40px;
     margin-right: 10px;
-    /* border: 1px solid red; */
   }
 .inpborder {
     border:1px solid red;
@@ -50,11 +59,11 @@
 }
 .modal__btn {
     height: 30px;
-  width: 250px;
-  margin-top: 10px;
-  margin-left: 30;
-  font-size: 16px;
-  color:white;
-  background-color: blue;
-  border: none;
+    width: 250px;
+    margin-top: 10px;
+    margin-left: 30;
+    font-size: 16px;
+    color:white;
+    background-color: blue;
+    border: none;
 }
