@@ -74,7 +74,6 @@ const OtpLayout = (props: OtpLayoutProps) => {
           inpArr.push(item.value);
         });
         if (inpArr.join("") == props.random) {
-          console.log(inpArr)
           setTimeout(() => {
             props.setFlag(false);
             setMessage("");

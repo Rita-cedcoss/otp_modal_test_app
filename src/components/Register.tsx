@@ -13,7 +13,6 @@ const Register = () => {
   const [disabled, setDisabled] = useState<boolean>(false);
   // take value 4 t0 8 from input
   const inpNum = (e: any) => {
-    console.log(e.target.value);
     if (e.target.value.match(/^[4-8]$/)) {
       setNumber(e.target.value);
       setmessage("");
@@ -24,7 +23,6 @@ const Register = () => {
   };
   // for opt generation
   const otpGenerate = () => {
-    console.log(number);
     if (number == "" || number == undefined) {
       setmessage("Please Enter number between range 4 to 8");
     } else {
